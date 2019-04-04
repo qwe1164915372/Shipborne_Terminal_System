@@ -1,0 +1,165 @@
+body{
+    text-align: center;
+    height: 1400px;
+}
+#content_whole{
+    width: 60%;
+    border: 1px solid black;
+    margin: 0 auto;
+}
+
+#data_management{
+    display: flex;
+    flex-direction: column;
+}
+#data_management .top_guide{
+    width: 100%;
+}
+#data_management .top_guide .module_navbar{
+    display: flex;
+    flex-direction: row;
+}
+#data_management .top_guide .module_navbar .module_navbar_item{
+    width: 20%;
+    border-bottom: 5px solid #595959;
+    background-color: #595959;
+    color: white;
+    position: relative;
+}
+#data_management .top_guide .module_navbar .hover{
+    background: #CD2626;
+}
+
+#data_management .top_guide .module_navbar .module_navbar_item .module_list{
+    /* width: 100%; */
+    width: 190px;
+    /* padding: 10px 0; */
+    position: absolute;
+    top: 46px;
+    display: none;
+    background: blue;
+}
+#data_management .top_guide .module_navbar .module_navbar_item .module_list div{
+    padding: 10px;
+    background: #CD2626;
+    color: white;
+}
+#data_management .top_guide .module_navbar .module_navbar_item .module_list .parameter_hover{
+    background: #595959;
+    cursor: pointer;
+}
+/* #data_management .top_guide .module_navbar .module_navbar_item .module_list_hover{
+    background: green;
+} */
+#data_management .top_guide .module_navbar .module_navbar_item .module_name{
+    width: 100%;
+    padding: 10px 0 10px 0;
+    float: left;
+}
+/* #data_management .top_guide .module_navbar .module_navbar_item .module_name_hover{
+    background: yellow;
+} */
+#data_management .undertop_guide{
+    width: 100%;
+    display: flex;
+}
+#data_management .undertop_guide .device_area{
+    width: 20%;
+    border-right: 1px solid black;
+}
+#data_management .undertop_guide .device_area .device_list{
+    /* border: 1px solid blue; */
+    background: #8A8A8A;
+    color: white;
+}
+#data_management .undertop_guide .device_area .device_list .device_item{
+    padding: 10px 5px;
+    cursor: pointer;
+}
+#data_management .undertop_guide .device_area .device_list .device_item_chosen{
+    padding: 10px 5px;
+    cursor: pointer;
+}
+#data_management .undertop_guide .device_area .list_page{
+    /* border: 1px solid blue; */
+    display: flex;
+    justify-content: space-around;
+}
+#data_management .undertop_guide .device_area .list_page .page_button{
+    background: #CD2626;
+    border: 2px solid white;
+    border-radius: 40%;
+    cursor: pointer;
+}
+#data_management .undertop_guide .data_area{
+    width: 80%;
+}
+#data_management .undertop_guide .data_area .display_information{
+    height: 10%;
+    display: flex;
+}
+#data_management .undertop_guide .data_area .display_information .device_name{
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#data_management .undertop_guide .data_area .display_information .parameter{
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#data_management .undertop_guide .data_area .display_information .time_quantum{
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#data_management .undertop_guide .data_area .display_information .time_quantum input{
+    width: 60%;
+}
+/* #data_management .undertop_guide .data_area .display_information .time_quantum .value input{
+    width: 100%;
+} */
+
+#data_management .undertop_guide .data_area .display_area{
+    /* height: 85%; */
+    /* height: 371.75px; */
+    border: 1px solid black;
+    margin: 0 10px;
+}
+
+
+
+
+/* ----------------- */
+
+#video_management{
+    display: flex;
+}
+#video_management .device_list{
+    width: 20%;
+    border: 1px solid black;
+}
+#video_management .video_list{
+    width: 20%;
+    border: 1px solid black;
+}
+#video_management #video_display{
+    width: 60%;
+    height: 500px;
+    border: 1px solid black;
+}
+#video_management #video_display .video_area{
+    width: 100%;
+    height: 100%;
+}
+#video_management #video_display .video_area .x{
+    width: 100%;
+    height: 100%;
+}
+#video_management #video_display .video_area video{
+    width: 100%;
+    height: 100%;
+}

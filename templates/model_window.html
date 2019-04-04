@@ -1,0 +1,206 @@
+<!-- <html>
+
+<head>
+    <script src="../static/js/jquery.min.js"></script>
+</head>
+
+
+<style>
+    .model_body{
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+    .model_window{
+        border: 1px solid black;
+        position: fixed;
+        top: 26%;
+        left: 35%;
+        width: 400px;
+        min-width: 380px;
+    }
+
+    .model_window .window_function{
+        padding: 15px;
+    }
+    .model_window .window_function:before{
+        content: '';
+        display: table;
+    }
+    .model_window .window_function:after{
+        content: '';
+        display: table;
+        clear: both;
+    }
+    .model_window .window_function span{
+        float: right;
+        font-size: 30px;
+        font-weight: normal;
+        line-height: 0.8;
+        margin-top: -8px;
+        outline: none;
+        cursor: pointer;
+    }
+    .model_window .window_function h4{
+        float: left;
+        margin: 0;
+    }
+    
+    .model_window .window_content .content_item{
+        padding: 5px;
+        margin: 10px;
+    }
+    .model_window .window_content .content_item div{
+        width: 30%;
+        display: inline-block;
+    }
+    .model_window .window_content .content_item input{
+        display: inline-block;
+    }
+    .model_window .window_confirm{
+        float: right;
+        padding: 15px;
+    }
+    .model_window .window_confirm button{
+        font-size: 1.2em;
+        outline: none;
+        background-color: #949494;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <div class="model_body">
+        <div class="model_window">
+            <div class="window_function">
+                <span>x</span>
+                <h4>添加用户</h4>
+            </div>
+            <form action="">
+                <div class="window_content">
+                    <div class="content_item">
+                        <div>用户名</div>
+                        <input type="text">
+                    </div>
+                    <div class="content_item">
+                        <div>密码</div>
+                        <input type="text">
+                    </div>
+                    <div class="content_item">
+                        <div>身份</div>
+                        <input type="text">
+                    </div>
+                </div>
+                <div class="window_confirm">
+                    <button>确定</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html> -->
+
+
+
+<html>
+
+<head>
+    <script src="../static/js/jquery.min.js"></script>
+</head>
+
+
+<style>
+    .model_body {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+
+    .model_window {
+        width: 220px;
+        min-width: 200px;
+        height: 130px;
+        min-height: 120px;
+        border: 1px solid black;
+        position: fixed;
+        top: 26%;
+        left: 35%;
+
+    }
+
+    .model_window .window_function {
+        padding: 15px;
+    }
+
+    .model_window .window_function:before {
+        content: '';
+        display: table;
+    }
+
+    .model_window .window_function:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+
+    .model_window .window_function span {
+        float: right;
+        font-size: 30px;
+        font-weight: normal;
+        line-height: 0.8;
+        margin-top: -8px;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .model_window .window_function h4 {
+        float: left;
+        margin: 0;
+    }
+
+    .model_window .window_confirm {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        position: absolute;
+        bottom: 10px;
+        padding: 15px 0;
+    }
+    
+    .model_window .window_confirm button {
+        font-size: 1.2em;
+        outline: none;
+        background-color: #949494;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <div class="model_body">
+        <div class="model_window">
+            <div class="window_function">
+                <span>x</span>
+                <h4>确定删除</h4>
+            </div>
+            <div class="window_confirm">
+                <div class="button_item">
+                    <button>取消</button>
+                </div>
+                <div class="button_item">
+                    <button>确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

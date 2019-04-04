@@ -1,0 +1,212 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-type" content="text/javascript" charset="utf-8">
+    <title>展示</title>
+    <script src="../static/js/jquery.min.js"></script>
+    <!-- <script src="../static/js/video_videomanagement.js" charset="utf-8"></script> -->
+    <link rel="stylesheet" href="../static/css/data_management.css">
+    <link rel="stylesheet" href="../static/css/system_namagement.css">
+
+    <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+
+
+
+
+
+
+    <link type="text/css" href="http://code.jquery.com/ui/1.9.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+
+    
+
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.9.1/jquery-ui.min.js"></script>
+    <script src="../static/js/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
+
+    <script src="../static/js/jquery.ui.datepicker-zh-CN.js.js" type="text/javascript" charset="gb2312"></script>
+    <script src="../static/js/jquery-ui-timepicker-zh-CN.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript"
+        src="http://api.map.baidu.com/api?v=2.0&ak=VTrRlXHSjUcx2DVvGXsTHAM9mBncBVdT"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
+
+    <script src="../static/js/data_management.js" charset="utf-8"></script>
+    <script src="../static/js/system_management.js" charset="utf-8"></script>
+
+</head>
+
+<body>
+    <!-- <div id="test" style="display:none">{{device_list}}</div> -->
+    <div id="content_whole">
+        <!-- <div id="file_management">
+            <div id="device_list">
+            </div>
+            <div id="video_list">
+            </div>
+            <div id="video_display">
+            </div>
+        </div> -->
+
+
+
+        <div id="data_management" style="display:none">
+            <div class="top_guide">
+                <div class="module_navbar">
+                    <div class="module_navbar_item">
+                        <div class="module_list">
+                            <div>信号强度</div>
+                        </div>
+                        <span class="module_name">北斗</span>
+                    </div>
+                    <div class="module_navbar_item">
+                        <div class="module_list">
+                            <div>经纬度</div>
+                        </div>
+                        <span class="module_name">GPS</span>
+                    </div>
+                    <div class="module_navbar_item">
+                        <div class="module_list">
+                            <div>水流速度</div>
+                            <div>水流方向</div>
+                            <div>浪高</div>
+                        </div>
+                        <span class="module_name">Receive</span>
+                    </div>
+                    <div class="module_navbar_item">
+                        <div class="module_list">
+                            <div>温度</div>
+                            <div>湿度</div>
+                            <div>大气压</div>
+                        </div>
+                        <span class="module_name">百叶窗</span>
+                    </div>
+                    <div class="module_navbar_item">
+                        <div class="module_list">
+                            <div>速度</div>
+                            <div>方向</div>
+                        </div>
+                        <span class="module_name">风力计</span>
+                    </div>
+                </div>
+            </div>
+            <div class="undertop_guide">
+                <div class="device_area">
+                    <div class="device_list">
+
+                    </div>
+                    <div class="list_page">
+
+                    </div>
+                </div>
+                <div class='data_area'>
+                    <div class="display_information">
+                        <div class="device_name">
+                            <span>设备：</span>
+                            <span class="value">设备1</span>
+                        </div>
+                        <div class="parameter">
+                            <span>指标：</span>
+                            <span class="value">信号强度</span>
+                        </div>
+                        <div class="time_quantum">
+                            <span>时间：</span>
+                            <!-- <span class="value"> -->
+                            <input id="choose_time" type="text">
+                            <!-- </span> -->
+                        </div>
+                    </div>
+                    <div id="main" class="display_area">
+
+                    </div>
+                    <script type="text/javascript"
+                        src="http://api.map.baidu.com/api?v=2.0&ak=VTrRlXHSjUcx2DVvGXsTHAM9mBncBVdT"></script>
+                </div>
+            </div>
+
+        </div>
+        <!-- <div id="video_management" style="display:none">
+            <div class="device_list">
+            </div>
+            <div class="video_list">
+            </div>
+            <div id="video_display">
+                <div class="video_area">
+                    <video class="the_video" src="" controls='controls'></video>
+                </div>
+            </div>
+        </div> -->
+        <div id="system_management">
+            <div class="managefunction_list">
+                <div class="User_choose">用户管理</div>
+                <div class="Device_choose">设备管理</div>
+            </div>
+            <div class="manage_area">
+                <div class='manageUser'>
+                    <div class="add_button">
+                        <div class="add_user">
+                            <button>添加用户</button>
+                        </div>
+                    </div>
+                    <div class="content_list">
+                        <table class="display">
+                            <thead>
+                                <tr>
+                                    <td>ID</td>
+                                    <td>用户名</td>
+                                    <td>身份</td>
+                                    <td>操作</td>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                            </tfoot>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                        <div class="turning_page">
+                            <div class="turning_item turning_button">></div>
+                            <div class="turning_item page_num">1</div>
+                            <div class="turning_item turning_button"><</div>
+                        </div>
+                    </div>
+                </div>
+                <div class='manageDevice'>
+                    <div class="add_button">
+                        <div class="add_device">
+                            <button>添加设备</button>
+                        </div>
+                    </div>
+                    <div class="content_list">
+                        <table class="display">
+                            <thead>
+                                <tr>
+                                    <td>IP</td>
+                                    <td>设备名</td>
+                                    <td>所属船舰</td>
+                                    <td>操作</td>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                            </tfoot>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                        <div class="turning_page">
+                            <div class="turning_item turning_button">></div>
+                            <div class="turning_item page_num">1</div>
+                            <div class="turning_item turning_button"><</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+
+</html>

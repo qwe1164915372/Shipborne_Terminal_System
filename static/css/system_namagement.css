@@ -1,0 +1,104 @@
+#system_management{
+    display: flex;
+}
+#system_management .managefunction_list{
+    width: 20%;
+}
+#system_management .managefunction_list div{
+    margin: 55px 10px 0px 10px;
+    padding: 10px 0;
+    background-color: #595959;
+    color: white;
+    cursor: pointer
+}
+#system_management .manage_area{
+    width: 80%;
+}
+#system_management .manage_area .manageUser{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+#system_management .manage_area .manageDevice{
+    position: relative;
+    display: none;
+    flex-direction: column;
+}
+#system_management .manage_area .add_button{
+    padding: 15px;
+    border: 1px solid black;
+}
+#system_management .manage_area .add_button div{
+    float: right;
+}
+#system_management .manage_area .add_button div :hover{
+    background-color: #5E5E5E;
+}
+#system_management .manage_area .add_button div button{
+    border: 0;
+    background-color: #949494;
+    font-size: 1.2em;
+    outline: none;
+    color: white;
+    cursor: pointer;
+}
+#system_management .manage_area .content_list{
+    border: 1px solid black;
+}
+#system_management .manage_area .content_list table{
+    width: 100%;
+    border-collapse: collapse;
+}
+#system_management .manage_area .content_list table td{
+    padding: 10px 0;
+    border-top: 1px solid black;
+}
+#system_management .manage_area .content_list table td a{
+    margin: 0 5px;
+}
+#system_management .manage_area .content_list .turning_page{
+    align-items: baseline;
+    margin-top: 10px;
+    margin-right: 60px;
+    /* overflow: hidden; */
+}
+#system_management .manage_area .content_list .turning_page .turning_item{
+    float: right;
+    padding: 10px 15px;
+    border: 1px solid #595959
+}
+#system_management .manage_area .content_list .turning_page .turning_button{
+    background-color: #595959;
+    color: white;
+    cursor: pointer
+}
+#system_management .manage_area .content_list .turning_page .page_num{
+    /* border: 1px solid #595959 */
+}
+
+
+
+/* .f{
+    border: 1px solid red;
+    width: 300px;
+    display: flex;
+}
+
+.s1{
+    border: 1px;
+    width: 200px;
+}
+
+.s1 div{
+    width: 100px;
+    height: 100px;
+    background: black;
+    float: left;
+    
+} */
+/* .s2{
+    width: 100px;
+    height: 100px;
+    background-color: yellow;
+    float: right;
+} */

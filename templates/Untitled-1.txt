@@ -1,0 +1,27 @@
+<div class="model_body">
+    <div class="model_window">
+        <div class="window_function">
+            <span>x</span>
+            <div>添加用户</div>
+        </div>
+        <form action="">
+            <div class="window_content">
+                <div>
+                    <div>用户名</div>
+                    <input type="text">
+                </div>
+                <div>
+                    <div>用户名</div>
+                    <input type="text">
+                </div>
+                <div>
+                    <div>用户名</div>
+                    <input type="text">
+                </div>
+            </div>
+            <div class="window_confirm">
+                <button>确定</button>
+            </div>
+        </form>
+    </div>
+</div>
