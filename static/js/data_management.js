@@ -96,13 +96,11 @@ function dm_device_item_hoverandclick() {
                 }
             )
             $('#data_management .undertop_guide .data_area .device_name .value').text($(this).text());
-            console.log('to be added');
         }
     )
 }
 
 function dm_getData(all_devices, deviceName, tableName, Parameter, timeQuantum) {
-    console.log(tableName);
     // let data_url = 'C:/Users/Dominator/Desktop/viewview/source/data/project.db';
     let key,
         tablename,
@@ -119,14 +117,12 @@ function dm_getData(all_devices, deviceName, tableName, Parameter, timeQuantum) 
     switch (Parameter) {
         case '信号强度': parameter = 'strength'; break;
         case '经纬度': parameter = { longitude: 'longitude', latitude: 'latitude' }; break;
-        case '水流速度': parameter = 'flow_velocity'; break;
-        case '水流方向': parameter = 'flow_direction'; break;
+        case '水流速度方向': parameter = 'flow'; break;
         case '浪高': parameter = 'wave_height'; break;
         case '温度': parameter = 'temperature'; break;
-        case '湿度': parameter = 'humidity'; break;
+        case '湿度': parameter = 'humility'; break;
         case '大气压': parameter = 'atmosphere'; break;
-        case '风速': parameter = 'speed'; break;
-        case '风向': parameter = 'direction'; break;
+        case '风速风向': parameter = 'wind'; break;
     }
     // switch(tablename){
     //     case 'beidou':break;
@@ -135,28 +131,32 @@ function dm_getData(all_devices, deviceName, tableName, Parameter, timeQuantum) 
     //     case 'shelter':break;
     //     case 'windmeter':break;
     // }
+    console.log(JSON.stringify({ path: all_devices[key], tableName: tablename, Parameter: parameter, timeQuantum: timeQuantum }));
     $.ajax({
-        url: 'http://localhost:5000/',
+        url: 'http://localhost:5000/display_data',
         type: 'POST',
         contentType: 'application/json;charset=utf-8',
         data: JSON.stringify({ path: all_devices[key], tableName: tablename, Parameter: parameter, timeQuantum: timeQuantum }),
         dataType: 'JSON',
         success: function (result) {
-            if (result)
-                dm_display_chart(tablename, result);
-            // console.log('这是返回的数据', result);
-            // console.log('这是返回的数据类型', typeof (result));
-            // console.log(result[0]);
-            // console.log(typeof (result[0]));
+            console.log('看一下', result);
+            if (result[0] == undefined) {
+                $('#main').css({
+                    'text-align': 'center',
+                })
+                $('#main').append('<h1>没有数据</h1>');
+            } else {
+                dm_display_chart(tablename, result, parameter);
+            }
         }
     })
 }
 
 function dm_display_strength_chart(data) {
-    let xdata = [];
-    for (let i = 0; i < data.length; i++) {
-        xdata.push(i);
-    }
+    console.log(data);
+    let xdata = data.map(item => {
+        return item[0].slice(8, 10) + ':' + item[0].slice(10, 12) + ':' + item[0].slice(12);
+    })
     let ydata = data.map(
         function (item) {
             return item[1].split(',')
@@ -166,13 +166,16 @@ function dm_display_strength_chart(data) {
             return Math.max.apply(null, it)
         }
     )
+    // var dom = document.getElementById("main");
+    // var myChart = echarts.init(dom);
+    // var app = {};
     let myChart = echarts.init(document.getElementById('main'));
     let option = {
         tooltip: {
             show: true
         },
         legend: {
-            data: ['10组波束中最大的信号强度，只要大于4表示发射成功']
+            data: ['10组波束中最大的信号强度，只要不小于4表示发射成功']
         },
         xAxis: [
             {
@@ -198,7 +201,6 @@ function dm_display_strength_chart(data) {
 }
 
 function dm_display_coordinate_chart(data) {
-    // console.log('播放图表函数');
     var coordinate = data.map(
         function (item) {
             return item.slice(1);
@@ -208,11 +210,6 @@ function dm_display_coordinate_chart(data) {
             return [Number((Number(item[0].replace(/[^0-9.]/ig, '').substring(0, 10)) / 100).toFixed(6)), Number((Number(item[1].replace(/[^0-9.]/ig, '').substring(0, 10)) / 100).toFixed(6))];
         }
     )
-
-
-    console.log(coordinate);
-
-
     let map = new BMap.Map("main");
     map.centerAndZoom(new BMap.Point(coordinate[0][0], coordinate[0][1]), 5);
     //map.centerAndZoom(new BMap.Point(142.599876, 10.540731), 16);
@@ -232,28 +229,545 @@ function dm_display_coordinate_chart(data) {
     var curve = new BMapLib.CurveLine(points, { strokeColor: 'blue', strokeWight: 3, strokeOpacity: 0.5 });
     map.addOverlay(curve);
     curve.enableEditing();
-    
-    $('.anchorBL').css('display','none');
+
+    $('.anchorBL').css('display', 'none');
     // setTimeout(function () {
     //     map.setViewport(points);
     //     //调整到最佳视野
     // }, 2000);
-
-
-
 }
 
-function dm_display_chart(tablename, data) {
+function dm_display_flow_chart(data) {
+    var dom = document.getElementById("main");
+    var myChart = echarts.init(dom);
+    var app = {};
+    data.forEach(item => {
+        item[1] = Number(item[1]);
+        item[2] = Number(item[2]);
+    });
+    let dateList = data.map(function (item) {
+        return item[0].slice(8, 10) + ':' + item[0].slice(10, 12) + ':' + item[0].slice(12);
+    });
+    let valueList1 = data.map(function (item) {
+        return item[1];
+    });
+    let valueList2 = data.map(function (item) {
+        return item[2];
+    });
+    console.log('改善后的', dateList);
+    option = {
+
+        // Make gradient line here
+        visualMap: [{
+            show: false,
+            type: 'continuous',
+            seriesIndex: 0,
+            min: 0,
+            max: 400
+        }, {
+            show: false,
+            type: 'continuous',
+            seriesIndex: 1,
+            dimension: 0,
+            min: 0,
+            max: dateList.length - 1
+        }],
+
+
+        title: [{
+            left: 'center',
+            text: '水流速度'
+        }, {
+            top: '55%',
+            left: 'center',
+            text: '水流速度'
+        }],
+        tooltip: {
+            trigger: 'axis'
+        },
+        xAxis: [{
+            data: dateList
+        }, {
+            data: dateList,
+            gridIndex: 1
+        }],
+        yAxis: [{
+            splitLine: { show: false }
+        }, {
+            splitLine: { show: false },
+            gridIndex: 1
+        }],
+        grid: [{
+            bottom: '60%'
+        }, {
+            top: '60%'
+        }],
+        series: [{
+            type: 'line',
+            showSymbol: false,
+            data: valueList1
+        }, {
+            type: 'line',
+            showSymbol: false,
+            data: valueList2,
+            xAxisIndex: 1,
+            yAxisIndex: 1
+        }]
+    };
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+}
+function dm_display_wave_height_chart(data) {
+    console.log('进到浪高里');
+    var dom = document.getElementById("main");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+
+    data1 = data.map(item => {
+        return item[0].slice(8, 10) + ':' + item[0].slice(10, 12) + ':' + item[0].slice(12);
+    })
+    data2 = data.map(item => {
+        return String(item[1])
+    })
+
+    option = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['浪高']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                mark: { show: true },
+                dataView: { show: true, readOnly: false },
+                magicType: { show: true, type: ['line', 'bar', 'stack', 'tiled'] },
+                restore: { show: true },
+                saveAsImage: { show: true }
+            }
+        },
+        calculable: true,
+        xAxis: [
+            {
+                type: 'category',
+                boundaryGap: false,
+                data: data1
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            {
+                name: '浪高',
+                type: 'line',
+                stack: '总量',
+                data: data2
+            }
+        ]
+    };
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+}
+function dm_display_temperature_chart(data, parameter) {
+    for (let i = 0; i < data.length; i++) {
+        if (data[i] == null || data[i] <= -100) {
+            data[i] = NaN;
+        }
+    }
+
+    var xdata = [
+        '00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '00:30',
+        '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+        '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
+        '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'];
+
+    var dom = document.getElementById("main");
+    var myChart = echarts.init(dom);
+    var app = {};
+    let option = {
+        xAxis: {
+            type: 'category',
+            data: xdata
+        },
+        yAxis: {
+
+            type: 'value',
+
+        },
+        series: [{
+            //data: [820, 932, 901, 934, 1290, 1330, 1320],
+            data: data,
+            type: 'line',
+            smooth: true
+        }]
+    };
+    ;
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+}
+function dm_display_humidity_chart(data) {
+
+
+    for (let i = 0; i < data.length; i++) {
+        if (data[i] == null) {
+            data[i] = data[i - 1];
+        }
+    }
+    for (let i = 0; i < data.length; i++) {
+        if (String(data[i]).replace('%', '') - String(data[i - 1]).replace('%', '') > 20) {
+            data[i] = data[i - 1];
+        }
+    }
+    var xdata = [
+        '00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '00:30',
+        '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+        '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
+        '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'];
+    var data = data.map(function (item, index) {
+        let value = Number((Number.parseFloat(item.replace('%', '')) / 100).toPrecision(3));
+        return {
+            date: xdata[index],
+            l: Number((value - 0.05).toPrecision(3)),
+            u: Number((value + 0.05).toPrecision(3)),
+            value: value
+        }
+    });
+    var dom = document.getElementById("main");
+    var myChart = echarts.init(dom);
+    var app = {};
+    let option = null;
+    myChart.showLoading();
+    myChart.hideLoading();
+
+    var base = -data.reduce(function (min, val) {
+        return Math.floor(Math.min(min, val.l));
+    }, Infinity);
+    myChart.setOption(option = {
+        title: {
+            text: 'Confidence Band',
+            subtext: 'Example in MetricsGraphics.js',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                animation: false,
+                label: {
+                    backgroundColor: '#ccc',
+                    borderColor: '#aaa',
+                    borderWidth: 1,
+                    shadowBlur: 0,
+                    shadowOffsetX: 0,
+                    shadowOffsetY: 0,
+                    textStyle: {
+                        color: '#222'
+                    }
+                }
+            },
+            formatter: function (params) {
+                return params[2].name + '<br />' + params[2].value;
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            data: data.map(function (item) {
+                return item.date;
+            }),
+            // axisLabel: {
+            //    formatter: function (value, idx) {
+            //        var date = new Date(value);
+            //        return idx === 0 ? value : [date.getMonth() + 1, date.getDate()].join('-');
+            //    }
+            // },
+            splitLine: {
+                show: false
+            },
+            boundaryGap: false
+        },
+        yAxis: {
+            axisLabel: {
+                formatter: function (val) {
+                    return (val - base) * 100 + '%';
+                }
+            },
+            axisPointer: {
+                label: {
+                    formatter: function (params) {
+                        return ((params.value - base) * 100).toFixed(1) + '%';
+                    }
+                }
+            },
+            splitNumber: 3,
+            splitLine: {
+                show: false
+            }
+        },
+        series: [{
+            name: 'L',
+            type: 'line',
+            data: data.map(function (item) {
+                return item.l + base;
+            }),
+            lineStyle: {
+                normal: {
+                    opacity: 0
+                }
+            },
+            stack: 'confidence-band',
+            symbol: 'none'
+        }, {
+            name: 'U',
+            type: 'line',
+            data: data.map(function (item) {
+                return item.u - item.l;
+            }),
+            lineStyle: {
+                normal: {
+                    opacity: 0
+                }
+            },
+            areaStyle: {
+                normal: {
+                    color: '#ccc'
+                }
+            },
+            stack: 'confidence-band',
+            symbol: 'none'
+        }, {
+            type: 'line',
+            data: data.map(function (item) {
+                return item.value + base;
+            }),
+            hoverAnimation: false,
+            symbolSize: 6,
+            itemStyle: {
+                normal: {
+                    color: '#8EE5EE'
+                }
+            },
+            showSymbol: false
+        }]
+    }, true);
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+
+}
+function dm_display_atmosphere_chart(data) {
+    for (let i = 0; i < data.length; i++) {
+        if (data[i] == null) {
+            data[i] = data[i - 1];
+        }
+    }
+    for (let i = 0; i < data.length; i++) {
+        if (data[i] - data[i - 1] > 400 || data[i] == null) {
+            data[i] = data[i - 1];
+        }
+    }
+    var xdata = [
+        '00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '00:30',
+        '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+        '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
+        '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'];
+    var data = data.map(function (item, index) {
+        return [xdata[index], Number(item)]
+    });
+    var dom = document.getElementById("main");
+    var myChart = echarts.init(dom);
+    var app = {};
+    let option = {
+        title: {
+            text: '一天内大气压',
+            subtext: '数据'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['大气压']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                mark: { show: true },
+                dataView: { show: true, readOnly: false },
+                magicType: { show: true, type: ['line', 'bar'] },
+                restore: { show: true },
+                saveAsImage: { show: true }
+            }
+        },
+        calculable: true,
+        xAxis: [
+            {
+                type: 'category',
+                boundaryGap: false,
+                data: data.map((item) => {
+                    return item[0]
+                })
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            }
+        ],
+        series: [
+            {
+                name: '大气压值',
+                type: 'line',
+                data: data.map((item) => {
+                    return item[1]
+                }),
+                markPoint: {
+                    data: [
+                        { type: 'max', name: '最大值' },
+                        { type: 'min', name: '最小值' }
+                    ]
+                },
+                markLine: {
+                    data: [
+                        { type: 'average', name: '平均值' }
+                    ]
+                }
+            },
+        ]
+    };
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+}
+function dm_display_wind_chart(data) {
+    var dom = document.getElementById("main");
+    var myChart = echarts.init(dom);
+    var app = {};
+    data.forEach(item => {
+        item[1] = Number(item[1]);
+        item[2] = Number(item[2]);
+    });
+    let dateList = data.map(function (item) {
+        return item[0].slice(8, 10) + ':' + item[0].slice(10, 12) + ':' + item[0].slice(12);
+    });
+    let valueList1 = data.map(function (item) {
+        return item[1];
+    });
+    let valueList2 = data.map(function (item) {
+        return item[2];
+    });
+    console.log('改善后的', dateList);
+    option = {
+
+        // Make gradient line here
+        visualMap: [{
+            show: false,
+            type: 'continuous',
+            seriesIndex: 0,
+            min: 0,
+            max: 400
+        }, {
+            show: false,
+            type: 'continuous',
+            seriesIndex: 1,
+            dimension: 0,
+            min: 0,
+            max: dateList.length - 1
+        }],
+
+
+        title: [{
+            left: 'center',
+            text: '风速'
+        }, {
+            top: '55%',
+            left: 'center',
+            text: '风向'
+        }],
+        tooltip: {
+            trigger: 'axis'
+        },
+        xAxis: [{
+            data: dateList
+        }, {
+            data: dateList,
+            gridIndex: 1
+        }],
+        yAxis: [{
+            splitLine: { show: false }
+        }, {
+            splitLine: { show: false },
+            gridIndex: 1
+        }],
+        grid: [{
+            bottom: '60%'
+        }, {
+            top: '60%'
+        }],
+        series: [{
+            type: 'line',
+            showSymbol: false,
+            data: valueList1
+        }, {
+            type: 'line',
+            showSymbol: false,
+            data: valueList2,
+            xAxisIndex: 1,
+            yAxisIndex: 1
+        }]
+    };
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+}
+
+
+
+
+function dm_display_chart(tablename, data, parameter) {
     if (tablename == 'beidou') {
         dm_display_strength_chart(data);
     } else if (tablename == 'gps') {
-        console.log('地图函数');
         dm_display_coordinate_chart(data);
+    } else if (tablename == 'received') {
+        if (parameter == 'flow') {
+            dm_display_flow_chart(data);
+        } else if (parameter == 'wave_height') {
+            dm_display_wave_height_chart(data)
+        }
+    } else if (tablename == 'shelter') {
+        if (parameter == 'temperature') {
+            dm_display_temperature_chart(data, parameter);
+        } else if (parameter == 'humility') {
+            dm_display_humidity_chart(data);
+        } else if (parameter == 'atmosphere') {
+            dm_display_atmosphere_chart(data, parameter);
+        }
+
+    } else if (tablename == 'windmeter') {
+        dm_display_wind_chart(data);
     }
 }
 
 function choosetime_and_display(all_devices) {
-    console.log(jQuery);
     jQuery(function () {
         jQuery('#choose_time').datetimepicker({
             timeFormat: "HH:mm:ss",
@@ -264,6 +778,20 @@ function choosetime_and_display(all_devices) {
         'click',
         '.ui-datepicker-close',
         function () {
+
+            $('#main').remove()
+            console.log($('#data_management'));
+            $('#data_management .data_area').append('<div id="main" asclass="display_area" style="height"></div>');
+            let height = $('#data_management .undertop_guide .data_area').css('height');
+            $('#main').css({
+                height: parseInt(height) * 0.85,
+                border: '1px solid black',
+                margin: '0 10px'
+            })
+            console.log($('#data_management .data_area #main'));
+            //$('#main').empty();
+            //$('#main').rem
+
             let deviceName = $('#data_management .undertop_guide .data_area .device_name .value').text();
             let tableName = '';
             let Parameter = $('#data_management .undertop_guide .data_area .parameter .value').text();
@@ -274,28 +802,19 @@ function choosetime_and_display(all_devices) {
             switch (Parameter) {
                 case '信号强度': tableName = '北斗'; break;
                 case '经纬度': tableName = 'GPS'; break;
-                case '水流速度': tableName = 'Receive'; break;
-                case '水流方向': tableName = 'Receive'; break;
+                case '水流速度方向': tableName = 'Receive'; break;
                 case '浪高': tableName = 'Receive'; break;
                 case '温度': tableName = '百叶窗'; break;
                 case '湿度': tableName = '百叶窗'; break;
                 case '大气压': tableName = '百叶窗'; break;
-                case '风速': tableName = '风力计'; break;
-                case '风向': tableName = '风力计'; break;
+                case '风速风向': tableName = '风力计'; break;
             }
-            //let timeQuantum = $('#data_management .undertop_guide .data_area .time_quantum input').val().replace(/[^0-9]/ig, "").substring(0, 12);
-            // let timeQuantum = {
-            //     startTime:Number(time+'00'),
-            //     endTime:(Number(time)+1)*100                
-            // }
-            //console.log(deviceName);
-            //console.log(tableName);
-            //console.log(Parameter);
-            // console.log(time);
-            //console.log(timeQuantum);
-            //console.log(all_devices);
-            // console.log(all_devices.length);'
-            console.log(timeQuantum);
+            // console.log('这是all_devices', all_devices);
+            // console.log('这是deviceName', deviceName);
+            // console.log('这是tableName', tableName);
+            // console.log('这是Parameter', Parameter);
+            // console.log('这是timeQuantum', timeQuantum);
+
             dm_getData(all_devices, deviceName, tableName, Parameter, timeQuantum);
         }
     )
@@ -520,10 +1039,8 @@ function vm_video_click(video_url) {
     }
 }
 
-
-
-function data_management_show(){
-    $('#data_management').css('display','flex');
+function data_management_show() {
+    $('#data_management').css('display', 'flex');
     let all_devices = {
         device1: 'C:/Users/Dominator/Desktop/viewview/source/project.db', device2: 'url2', device3: 'url3', device4: 'url4', device5: 'url5',
         device6: 'url6', device7: 'url7', device8: 'url8', device9: 'url9', device10: 'url10',
@@ -581,9 +1098,6 @@ function data_management_show(){
         //'url76', 'url77', 'url78', 'url79', 'url80',
     ];
 
-    
-
-
     let all_videos = [                                   ///存放所有的设备的视频url
         ['video0', 'video1', 'video2'],
         ['video3', 'video4', 'video5'],
@@ -605,17 +1119,17 @@ function data_management_show(){
 
 
 }
-function data_management_remove(){
-    $('#data_management').css('display','none');
+
+function data_management_remove() {
+    $('#data_management').css('display', 'none');
     $('#data_management .undertop_guide .device_area .device_list').empty();
     $('#data_management .undertop_guide .device_area .list_page').empty();
     $('#data_management .undertop_guide .device_area .list_page').empty();
     $('#data_management .undertop_guide .data_area .display_area').empty();
 }
 
-
 $(document).ready(
     function () {
-        data_management_show()
+        data_management_show();
     }
 )

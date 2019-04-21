@@ -9,30 +9,12 @@
     <link rel="stylesheet" href="../static/css/data_management.css">
     <link rel="stylesheet" href="../static/css/system_namagement.css">
 
-    <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
-
-
-
-
-
+    
 
     <link type="text/css" href="http://code.jquery.com/ui/1.9.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />
 
+
     
-
-    <script type="text/javascript" src="http://code.jquery.com/ui/1.9.1/jquery-ui.min.js"></script>
-    <script src="../static/js/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
-
-    <script src="../static/js/jquery.ui.datepicker-zh-CN.js.js" type="text/javascript" charset="gb2312"></script>
-    <script src="../static/js/jquery-ui-timepicker-zh-CN.js" type="text/javascript"></script>
-
-
-    <script type="text/javascript"
-        src="http://api.map.baidu.com/api?v=2.0&ak=VTrRlXHSjUcx2DVvGXsTHAM9mBncBVdT"></script>
-    <script type="text/javascript" src="http://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
-
-    <script src="../static/js/data_management.js" charset="utf-8"></script>
-    <script src="../static/js/system_management.js" charset="utf-8"></script>
 
 </head>
 
@@ -50,7 +32,7 @@
 
 
 
-        <div id="data_management" style="display:none">
+        <div id="data_management">
             <div class="top_guide">
                 <div class="module_navbar">
                     <div class="module_navbar_item">
@@ -67,8 +49,7 @@
                     </div>
                     <div class="module_navbar_item">
                         <div class="module_list">
-                            <div>水流速度</div>
-                            <div>水流方向</div>
+                            <div>水流速度方向</div>
                             <div>浪高</div>
                         </div>
                         <span class="module_name">Receive</span>
@@ -83,8 +64,7 @@
                     </div>
                     <div class="module_navbar_item">
                         <div class="module_list">
-                            <div>速度</div>
-                            <div>方向</div>
+                            <div>风速风向</div>
                         </div>
                         <span class="module_name">风力计</span>
                     </div>
@@ -103,7 +83,7 @@
                     <div class="display_information">
                         <div class="device_name">
                             <span>设备：</span>
-                            <span class="value">设备1</span>
+                            <span class="value">device1</span>
                         </div>
                         <div class="parameter">
                             <span>指标：</span>
@@ -119,8 +99,8 @@
                     <div id="main" class="display_area">
 
                     </div>
-                    <script type="text/javascript"
-                        src="http://api.map.baidu.com/api?v=2.0&ak=VTrRlXHSjUcx2DVvGXsTHAM9mBncBVdT"></script>
+                    <!-- <script type="text/javascript"
+                        src="http://api.map.baidu.com/api?v=2.0&ak=VTrRlXHSjUcx2DVvGXsTHAM9mBncBVdT"></script> -->
                 </div>
             </div>
 
@@ -136,7 +116,7 @@
                 </div>
             </div>
         </div> -->
-        <div id="system_management">
+        <div id="system_management" style="display:none">
             <div class="managefunction_list">
                 <div class="User_choose">用户管理</div>
                 <div class="Device_choose">设备管理</div>
@@ -207,6 +187,21 @@
 
 
 
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <!-- <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script> -->
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.9.1/jquery-ui.min.js"></script>
+    <script src="../static/js/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
+
+    <script src="../static/js/jquery.ui.datepicker-zh-CN.js.js" type="text/javascript" charset="gb2312"></script>
+    <script src="../static/js/jquery-ui-timepicker-zh-CN.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript"
+        src="http://api.map.baidu.com/api?v=2.0&ak=VTrRlXHSjUcx2DVvGXsTHAM9mBncBVdT"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
+
+    <script src="../static/js/data_management.js" charset="utf-8"></script>
+    <script src="../static/js/system_management.js" charset="utf-8"></script>
 </body>
 
 </html>

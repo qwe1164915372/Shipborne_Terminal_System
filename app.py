@@ -47,42 +47,64 @@ def scanner():
 #     for device in devices.values():
 #         device_dict[device] = FtpReader(server=device)
 
-
 @app.route('/', methods=["GET", "POST"])
 @cross_origin()
 def index():
+    return render_template('index.html')
+
+
+
+@app.route('/display_data', methods=["GET", "POST"])
+@cross_origin()
+def display_data():
     if request.method == 'POST':
         data = request.get_json()
         print('这是data', data)
         start_time = re.sub("\D", "", data['timeQuantum'])
         time = datetime.datetime.strptime(
             data['timeQuantum'], "%Y-%m-%d %H:%M:%S")
+
         if data['tableName'] == 'beidou':  # 北斗每小时展现
             time_difference = datetime.timedelta(hours=1)
             end_time = re.sub(
                 "\D", "", (time+time_difference).strftime('%Y-%m-%d %H:%M:%S'))
+            return testajax.readFromSqlite(data['path'], "*", data['tableName'], start_time, end_time)
         elif data['tableName'] == 'gps':  # gps 每分钟展现
             time_difference = datetime.timedelta(minutes=1)
             end_time = re.sub(
                 "\D", "", (time+time_difference).strftime('%Y-%m-%d %H:%M:%S'))
-        # elif data['tableName'] == 'received':  # received  待定
-        #     time_difference = datetime.timedelta(hours=1)
-        #     end_time = re.sub("\D", "", time+time_difference.strftime('%Y-%m-%d %H:%M:%S'))
-        elif data['tableName'] == 'shelter':  # shelter  每30分钟展现
-            time_difference = datetime.timedelta(minutes=1)
-            end_time = re.sub(
-                "\D", "", (time+time_difference).strftime('%Y-%m-%d %H:%M:%S'))
-        # else:                                  #windmeter   待定
-        #     time_difference = datetime.timedelta(hours=1)
-        #     end_time = re.sub("\D","",time+time_difference.strftime('%Y-%m-%d %H:%M:%S'))
-
-        print(start_time)
-        print(end_time)
-        return testajax.readFromSqlite(data['path'], "*", data['tableName'], start_time, end_time)
+            return testajax.readFromSqlite(data['path'], "*", data['tableName'], start_time, end_time)
+        elif data['tableName'] == 'received':  # received  拿到每小时的数据  全部展现
+            time_difference = datetime.timedelta(hours=1)
+            #end_time = re.sub("\D", "", time+time_difference.strftime('%Y-%m-%d %H:%M:%S'))
+            end_time = re.sub("\D", "", (time + time_difference).strftime('%Y-%m-%d %H:%M:%S'))
+            print('展示receive')
+            print(start_time)
+            print(end_time)
+            return testajax.readReceived(data['path'], data['Parameter'], data['tableName'], start_time, end_time)
+        elif data['tableName'] == 'shelter':  # shelter  每30分钟展现   一次拿一天
+            start_time = datetime.datetime.combine(time, datetime.time.min)
+            end_time = start_time + datetime.timedelta(days = 1)
+            time_difference = datetime.timedelta(minutes=30)
+            next_time = start_time + time_difference
+            sql_time = [re.sub(
+                "\D", "", start_time.strftime('%Y-%m-%d %H:%M:%S'))]
+            while next_time != end_time:
+                sql_time.append(re.sub("\D", "", next_time.strftime('%Y-%m-%d %H:%M:%S')))
+                next_time = next_time + time_difference
+            sql_time.append(re.sub("\D", "", end_time.strftime('%Y-%m-%d %H:%M:%S')))
+            print(data['Parameter'])
+            return testajax.read_shelter(data['path'],data['Parameter'], data['tableName'], sql_time)
+        else:                                  #windmeter   每10分钟展现  全部拿到
+            end_time = re.sub("\D", "", (time + datetime.timedelta(minutes = 10)).strftime('%Y-%m-%d %H:%M:%S'))
+            print(start_time)
+            print(end_time)
+            return testajax.read_windmeter(data['path'],'*', data['tableName'],start_time, end_time)
     device_list = scanner()
     # generate_ftp(device_list)
     print('这是设备列表', device_list)
-    return render_template('index.html',  device_list=json.dumps(device_list))
+    #return render_template('index.html',  device_list=json.dumps(device_list))
+    # return render_template('index.html',  device_list=json.dumps('sadasd'))
     # return render_template('video_management.html')
     # return render_template('test2.html')
 

@@ -1,36 +1,48 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>css外层DIV半透明内层div不透明-弹出层效果的实现【实例】</title>
+    <title>Canvas tutorial</title>
     <style type="text/css">
-        body,td,th {
-            font-size: 12px; padding:0; margin:0;
+        canvas {
+            border: 1px solid black;
         }
-        .tanchuang_wrap{ width:600px; height:400px;position:absolute;left: 0px;top: 0px;z-index:100; display:none;}
-        .lightbox{width:600px;z-index:101; height:400px;background-color:red;filter:alpha(Opacity=20);-moz-opacity:0.2;opacity: 0.2; position:absolute; top:0px; left:0px;}
-        .tanchuang_neirong{width:353px;height:153px;border:solid 1px #f7dd8c;background-color:#FFF;position:absolute;z-index:105;left: 123px;top: 123px;}
     </style>
-    <script language="javascript">
-        function closeDiv(divId){
-            document.getElementById(divId).style.display = 'none';
-        }
-        function displayDiv(divId){
-            document.getElementById(divId).style.display = 'block';
-        }
-    </script>
 </head>
+
 <body>
-<div style="width:400px; height:400px; position:relative; text-align:center;">
-    <div class="tanchuang_wrap" id="aaaa">
-        <div class="lightbox"></div>
-        <div class="tanchuang_neirong">
-            <p><span onClick="closeDiv('aaaa')" style=" cursor:pointer;">关闭</span></p>
-            这里是弹窗内容
-        </div>
-    </div>
-    <span onclick="displayDiv('aaaa')" style="cursor:pointer;">点击我</span>
-    <p>测试通过，兼容IE6.0、IE7.0、火狐3.6、遨游等各大浏览器</p>
-</div>
+    <img src="../../newVX/imgs/1.png" alt="">
+    <canvas id="tutorial" width="300" height="300"></canvas>
 </body>
+<script type="text/javascript">
+    function draw() {
+        var canvas = document.getElementById('tutorial');
+        if (!canvas.getContext) return;
+        var ctx = canvas.getContext("2d");
+        console.log(ctx.fillStyle);
+        ctx.fillStyle = "red";
+        ctx.save();      //此时原点（0,0） 不旋转
+        console.log(ctx.fillStyle);
+        console.log(ctx.fillStyle + ',' + '(' + ctx.shadowOffsetX + ',' + ctx.shadowOffsetY + ')' + ctx.shadowBlur );
+
+        ctx.translate(100, 100);
+        ctx.rotate(Math.PI / 180 * 45);
+        ctx.fillStyle = "blue";
+        ctx.fillRect(0, 0, 100, 100);
+        ctx.save()       //此时原点（100,100） 旋转 45
+        console.log(ctx.fillStyle);
+        ctx.restore();   //此时原点（100,100） 旋转 45
+        console.log(ctx.fillStyle);
+
+        //ctx.save();
+        ctx.translate(0, 0);  //此时原点（0,0） 旋转45
+        ctx.fillRect(0, 0, 300, 300);
+        ctx.restore();   //此时原点（0,0） 不旋转
+        console.log(ctx.fillStyle);
+        ctx.fillRect(100, 0, 20, 20);
+
+
+    }
+    draw();
+</script>
+
 </html>

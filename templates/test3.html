@@ -1,61 +1,41 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
+
 <html>
 
 <head>
-	<meta charset="UTF-8">
-	<title>IE</title>
 
-	<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-shim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js"></script>-->
-	<script src="../static/js/es5-shim.min.js"></script>
-	<script src="../static/js/es5-sham.min.js"></script>
-	<script src="../static/js/json3.min.js"></script>
+	<title></title>
 
-	<script src="../static/js/template-web.js"></script>
+	<script type="text/javascript">
+
+		Promise.resolve('foo').then(function (string) {
+			return new Promise(function (resolve, reject) {
+				setTimeout(function () {
+					string += 'bar';
+					resolve(string);
+				}, 1);
+			});
+		}).then(function (string) {
+			setTimeout(function () {
+				string += 'baz';
+				console.log(string);
+			}, 1)
+			return string;
+		}).then(function (string) {
+			console.log("Last Then:  oops... didn't bother to instantiate and return " +
+				"a promise in the prior then so the sequence may be a bit " +
+				"surprising");
+			console.log(string);
+		});
+
+	</script>
+
 </head>
 
 <body>
-	<div id="content"></div>
-	<script id="test" type="text/html">
-{{if isAdmin}}
-
-<h1>{{title}}</h1>
-<ul>
-    {{each list value i}}
-        <li>索引 {{i + 1}} ：{{value}}</li>
-    {{/each}}
-</ul>
-
-{{/if}}
-{{$data}}
-</script>
-
-	<script>
-		var data = {
-			title: '基本例子',
-			isAdmin: true,
-			list: ['文艺', '博客', '摄影', '电影', '民谣', '旅行', '吉他']
-		};
-		var html = template('test', data);
-		document.getElementById('content').innerHTML = html;
 
 
 
-
-		let x = 'x1x1x1';
-		function f(x) {
-			var y = x;
-			y = '222';
-			console.log(y);
-		}
-		console.log(x);
-		f(x);
-		console.log(x);
-	</script>
 </body>
 
 </html>
-
-http://localhost:5000/add_data?info1=user5&info2=user5&info3=ordinary_user&tablename=users
-http://localhost:5000/add_data?info1=user7&info2=user7&info3=ordinary_user&tablename=users
